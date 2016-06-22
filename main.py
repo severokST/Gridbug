@@ -107,9 +107,14 @@ while not done:
       if not (cbug==obug):
         if (cbug.X == obug.X) and (cbug.Y == obug.Y):
           grid[cbug.X/Res,cbug.Y/Res]=0
-          buglist.remove(cbug)
-          buglist.remove(obug)
-          bugcount = bugcount -2
+          # Fix crash bug. It's not clear why this bug isn't in buglist.
+          # Consider this a terrible band-aid hack.
+          if cbug in buglist:
+            buglist.remove(cbug)
+            bugcount = bugcount - 1
+          if obug in buglist:
+            buglist.remove(obug)
+            bugcount = bugcount - 1
 
     if not (random.randint(0,spawnchance*bugcount)):
       buglist.append(bug(cbug.X,cbug.Y,cbug.vector))
